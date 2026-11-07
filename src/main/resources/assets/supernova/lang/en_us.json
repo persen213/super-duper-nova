@@ -1,0 +1,6 @@
+{
+  "supernova.ability.stellar": "Stellar",
+  "supernova.skill.supernova": "Supernova",
+  "supernova.skill.supernova.desc": "Create a massive stellar explosion with expanding rings of fire and force. Cost: 8000 CP, 200 Overload. Cooldown: 180s.",
+  "item.supernova.stellar_factor": "Stellar Factor"
+}

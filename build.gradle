@@ -1,0 +1,58 @@
+// Supernova: an add-on for Re:AcademyCraft 1.5.0 (Minecraft 1.20.1 / Forge 47.x).
+// The SDK's API-only jar in ./libs is enough to build. The full mod jar is only needed to RUN the game.
+plugins {
+    id 'java'
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+}
+
+group = 'dev.toaru.supernova'
+version = '1.0.0'
+base { archivesName = 'supernova-forge-1.20.1' }
+
+java { toolchain.languageVersion = JavaLanguageVersion.of(17) }
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 17
+}
+
+minecraft {
+    mappings channel: 'official', version: '1.20.1'
+    copyIdeResources = true
+    runs {
+        client {
+            workingDirectory project.file('run')
+            mods { supernova { source sourceSets.main } }
+        }
+        server {
+            workingDirectory project.file('run')
+            args '--nogui'
+            mods { supernova { source sourceSets.main } }
+        }
+    }
+}
+
+repositories {
+    flatDir { dirs 'libs' }
+}
+
+def academyVersion = project.findProperty('academyVersion') ?: '1.5.0'
+
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.20.1-47.4.10'
+    // Compile against the full mod jar if it is in ./libs, otherwise against the SDK's API-only jar (also in ./libs).
+    // Neither is packed into our jar: at run time Re:AcademyCraft itself must be installed.
+    def fullJar = file("libs/re-academycraft-forge-1.20.1-${academyVersion}.jar")
+    def apiOnly = project.hasProperty('academyApiOnly') || !fullJar.exists()
+    implementation fg.deobf("blank:re-academycraft-forge-1.20.1:${academyVersion}" + (apiOnly ? ':api' : ''))
+}
+
+tasks.named('processResources', ProcessResources) {
+    filteringCharset = 'UTF-8'
+    inputs.property 'version', project.version
+    filesMatching('META-INF/mods.toml') { expand 'version': project.version }
+}
+
+tasks.named('jar', Jar) {
+    finalizedBy 'reobfJar'
+}

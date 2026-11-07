@@ -1,0 +1,33 @@
+modLoader="javafml"
+loaderVersion="[47,48)"
+license="MIT"
+
+[[mods]]
+modId="supernova"
+version="${version}"
+displayName="Supernova"
+description="Re:AcademyCraft add-on: Supernova explosion ability."
+authors="toaru"
+displayURL="https://github.com"
+credits="Re:AcademyCraft by pinchan4273"
+
+[[dependencies.supernova]]
+modId="academy"
+mandatory=true
+versionRange="[1.5.0,1.6)"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.supernova]]
+modId="forge"
+mandatory=true
+versionRange="[47.4.10,48)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.supernova]]
+modId="minecraft"
+mandatory=true
+versionRange="[1.20.1,1.20.2)"
+ordering="NONE"
+side="BOTH"
